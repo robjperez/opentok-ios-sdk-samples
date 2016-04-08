@@ -10,13 +10,11 @@
 
 // Internally forward-declare that we can receive renderer delegate callbacks
 @interface TBExampleSubscriber () <TBRendererDelegate>
+@property (nonatomic, strong) TBExampleVideoRender* myVideoRender;
+@property (nonatomic, strong) id<TBExampleSubscriberDelegate> exampleSubscriberDelegate;
 @end
 
-@implementation TBExampleSubscriber {
-    TBExampleVideoRender* _myVideoRender;
-}
-
-@synthesize view = _myVideoRender;
+@implementation TBExampleSubscriber
 
 - (id)initWithStream:(OTStream *)stream
             delegate:(id<OTSubscriberKitDelegate>)delegate
@@ -44,8 +42,10 @@
 - (void)dealloc {
     [self.stream removeObserver:self forKeyPath:@"hasVideo" context:nil];
     [self.stream removeObserver:self forKeyPath:@"hasAudio" context:nil];
-    [_myVideoRender release];
-    [super dealloc];
+}
+
+- (UIView *)view {
+    return self.myVideoRender;
 }
 
 #pragma mark - KVO listeners for UI updates
@@ -59,10 +59,10 @@
             // If the video track has gone away, we can clear the screen.
             BOOL value = [[change valueForKey:@"new"] boolValue];
             if (value) {
-                [_myVideoRender setRenderingEnabled:YES];
+                [self.myVideoRender setRenderingEnabled:YES];
             } else {
-                [_myVideoRender setRenderingEnabled:NO];
-                [_myVideoRender clearRenderBuffer];
+                [self.myVideoRender setRenderingEnabled:NO];
+                [self.myVideoRender clearRenderBuffer];
             }
         } else if ([@"hasAudio" isEqualToString:keyPath]) {
             // nop?
@@ -74,9 +74,9 @@
 
 - (void)setSubscribeToVideo:(BOOL)subscribeToVideo {
     [super setSubscribeToVideo:subscribeToVideo];
-    [_myVideoRender setRenderingEnabled:subscribeToVideo];
+    [self.myVideoRender setRenderingEnabled:subscribeToVideo];
     if (!subscribeToVideo) {
-        [_myVideoRender clearRenderBuffer];
+        [self.myVideoRender clearRenderBuffer];
     }
 }
 
@@ -92,7 +92,7 @@
         if ([self.delegate
              respondsToSelector:@selector(subscriberVideoDataReceived:)])
         {
-            [self.delegate subscriberVideoDataReceived:self];
+            [self.exampleSubscriberDelegate subscriberVideoDataReceived:self];
         }
     });
 }

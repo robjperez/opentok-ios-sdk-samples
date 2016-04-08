@@ -10,19 +10,6 @@
 #import "TBExamplePublisher.h"
 #import "TBExampleSubscriber.h"
 
-@interface ViewController ()
-<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate>
-
-@end
-
-@implementation ViewController {
-    OTSession* _session;
-    TBExamplePublisher* _publisher;
-    TBExampleSubscriber* _subscriber;
-}
-static double widgetHeight = 240;
-static double widgetWidth = 320;
-
 // *** Fill the following variables using your own Project info  ***
 // ***          https://dashboard.tokbox.com/projects            ***
 // Replace with your OpenTok API key
@@ -32,8 +19,18 @@ static NSString* const kSessionId = @"";
 // Replace with your generated token
 static NSString* const kToken = @"";
 
-// Change to NO to subscribe to streams other than your own.
-static bool subscribeToSelf = YES;
+static double kWidgetHeight = 240;
+static double kWidgetWidth = 320;
+static BOOL kSubscribeToSelf = YES;
+
+@interface ViewController ()
+<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate>
+@property (strong, nonatomic) OTSession* session;
+@property (strong, nonatomic) TBExamplePublisher* publisher;
+@property (strong, nonatomic) TBExampleSubscriber* subscriber;
+@end
+
+@implementation ViewController
 
 #pragma mark - View lifecycle
 
@@ -43,9 +40,9 @@ static bool subscribeToSelf = YES;
     
     // Step 1: As the view comes into the foreground, initialize a new instance
     // of OTSession and begin the connection process.
-    _session = [[OTSession alloc] initWithApiKey:kApiKey
-                                       sessionId:kSessionId
-                                           delegate:self];
+    self.session = [[OTSession alloc] initWithApiKey:kApiKey
+                                           sessionId:kSessionId
+                                            delegate:self];
     [self doConnect];
 }
 
@@ -58,13 +55,7 @@ static bool subscribeToSelf = YES;
 (UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    if (UIUserInterfaceIdiomPhone == [[UIDevice currentDevice]
-                                      userInterfaceIdiom])
-    {
-        return NO;
-    } else {
-        return YES;
-    }
+    return UIUserInterfaceIdiomPhone != [[UIDevice currentDevice] userInterfaceIdiom];
 }
 #pragma mark - OpenTok methods
 
@@ -75,9 +66,8 @@ static bool subscribeToSelf = YES;
 - (void)doConnect
 {
     OTError *error = nil;
-    [_session connectWithToken:kToken error:&error];
-    if (error)
-    {
+    [self.session connectWithToken:kToken error:&error];
+    if (error) {
         [self showAlert:[error localizedDescription]];
     }
 }
@@ -89,19 +79,17 @@ static bool subscribeToSelf = YES;
  */
 - (void)doPublish
 {
-    _publisher = [[TBExamplePublisher alloc]
-                  initWithDelegate:self
-                  name:[[UIDevice currentDevice] name]];
+    self.publisher = [[TBExamplePublisher alloc] initWithDelegate:self
+                                                             name:[[UIDevice currentDevice] name]];
     
     OTError *error = nil;
-    [_session publish:_publisher error:&error];
-    if (error)
-    {
+    [self.session publish:_publisher error:&error];
+    if (error) {
         [self showAlert:[error localizedDescription]];
     }
 
-    [_publisher.view setFrame:CGRectMake(0, 0, widgetWidth, widgetHeight)];
-    [self.view addSubview:_publisher.view];
+    [self.publisher.view setFrame:CGRectMake(0, 0, kWidgetWidth, kWidgetHeight)];
+    [self.view addSubview:self.publisher.view];
 }
 
 /**
@@ -109,8 +97,8 @@ static bool subscribeToSelf = YES;
  * be attached to the session any more.
  */
 - (void)cleanupPublisher {
-    [_publisher.view removeFromSuperview];
-    _publisher = nil;
+    [self.publisher.view removeFromSuperview];
+    self.publisher = nil;
     // this is a good place to notify the end-user that publishing has stopped.
 }
 
@@ -122,12 +110,11 @@ static bool subscribeToSelf = YES;
  */
 - (void)doSubscribe:(OTStream*)stream
 {
-    _subscriber = [[TBExampleSubscriber alloc] initWithStream:stream
-                                                     delegate:self];
+    self.subscriber = [[TBExampleSubscriber alloc] initWithStream:stream
+                                                         delegate:self];
     OTError *error = nil;
-    [_session subscribe:_subscriber error:&error];
-    if (error)
-    {
+    [self.session subscribe:_subscriber error:&error];
+    if (error) {
         [self showAlert:[error localizedDescription]];
     }
 
@@ -141,8 +128,8 @@ static bool subscribeToSelf = YES;
  */
 - (void)cleanupSubscriber
 {
-    [_subscriber.view removeFromSuperview];
-    _subscriber = nil;
+    [self.subscriber.view removeFromSuperview];
+    self.subscriber = nil;
 }
 
 # pragma mark - OTSession delegate callbacks
@@ -158,9 +145,7 @@ static bool subscribeToSelf = YES;
 
 - (void)sessionDidDisconnect:(OTSession*)session
 {
-    NSString* alertMessage =
-    [NSString stringWithFormat:@"Session disconnected: (%@)",
-     session.sessionId];
+    NSString* alertMessage = [NSString stringWithFormat:@"Session disconnected: (%@)", session.sessionId];
     NSLog(@"sessionDidDisconnect (%@)", alertMessage);
 }
 
@@ -171,8 +156,7 @@ static bool subscribeToSelf = YES;
     
     // Step 3a: (if NO == subscribeToSelf): Begin subscribing to a stream we
     // have seen on the OpenTok session.
-    if (nil == _subscriber && !subscribeToSelf)
-    {
+    if (nil == self.subscriber && !kSubscribeToSelf) {
         [self doSubscribe:stream];
     }
 }
@@ -182,8 +166,7 @@ streamDestroyed:(OTStream *)stream
 {
     NSLog(@"session streamDestroyed (%@)", stream.streamId);
     
-    if ([_subscriber.stream.streamId isEqualToString:stream.streamId])
-    {
+    if ([self.subscriber.stream.streamId isEqualToString:stream.streamId]) {
         [self cleanupSubscriber];
     }
 }
@@ -198,9 +181,7 @@ connectionCreated:(OTConnection *)connection
 connectionDestroyed:(OTConnection *)connection
 {
     NSLog(@"session connectionDestroyed (%@)", connection.connectionId);
-    if ([_subscriber.stream.connection.connectionId
-         isEqualToString:connection.connectionId])
-    {
+    if ([self.subscriber.stream.connection.connectionId isEqualToString:connection.connectionId]) {
         [self cleanupSubscriber];
     }
 }
@@ -215,19 +196,15 @@ didFailWithError:(OTError*)error
 
 - (void)subscriberDidConnectToStream:(OTSubscriberKit*)subscriber
 {
-    NSLog(@"subscriberDidConnectToStream (%@)",
-          subscriber.stream.connection.connectionId);
-    [_subscriber.view setFrame:CGRectMake(0, widgetHeight, widgetWidth,
-                                         widgetHeight)];
-    [self.view addSubview:_subscriber.view];
+    NSLog(@"subscriberDidConnectToStream (%@)", subscriber.stream.connection.connectionId);
+    [self.subscriber.view setFrame:CGRectMake(0, kWidgetHeight, kWidgetWidth, kWidgetHeight)];
+    [self.view addSubview:self.subscriber.view];
 }
 
 - (void)subscriber:(OTSubscriberKit*)subscriber
   didFailWithError:(OTError*)error
 {
-    NSLog(@"subscriber %@ didFailWithError %@",
-          subscriber.stream.streamId,
-          error);
+    NSLog(@"subscriber %@ didFailWithError %@", subscriber.stream.streamId, error);
 }
 
 # pragma mark - OTPublisher delegate callbacks
@@ -239,8 +216,7 @@ didFailWithError:(OTError*)error
     // all participants in the OpenTok session. We will attempt to subscribe to
     // our own stream. Expect to see a slight delay in the subscriber video and
     // an echo of the audio coming from the device microphone.
-    if (nil == _subscriber && subscribeToSelf)
-    {
+    if (nil == self.subscriber && kSubscribeToSelf) {
         [self doSubscribe:stream];
     }
 }
@@ -248,8 +224,7 @@ didFailWithError:(OTError*)error
 - (void)publisher:(OTPublisherKit*)publisher
   streamDestroyed:(OTStream *)stream
 {
-    if ([_subscriber.stream.streamId isEqualToString:stream.streamId])
-    {
+    if ([self.subscriber.stream.streamId isEqualToString:stream.streamId]) {
         [self cleanupSubscriber];
     }
     

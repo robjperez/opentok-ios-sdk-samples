@@ -8,13 +8,15 @@
 #import <GLKit/GLKit.h>
 #import <OpenTok/OpenTok.h>
 
+#import "TBEAGLVideoRenderer.h"
+
 @protocol TBRendererDelegate;
 
 @interface TBExampleVideoRender : UIView <GLKViewDelegate, OTVideoRender>
 
 @property (nonatomic, assign) BOOL mirroring;
 @property (nonatomic, assign) BOOL renderingEnabled;
-@property (nonatomic, assign) id<TBRendererDelegate> delegate;
+@property (nonatomic, weak) id<TBRendererDelegate> delegate;
 
 /*
  * Clears the render buffer to a black frame

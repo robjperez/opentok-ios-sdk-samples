@@ -9,14 +9,12 @@
 #import "TBExampleVideoCapture.h"
 #import "TBExampleVideoRender.h"
 
-@implementation TBExamplePublisher {
-    TBExampleVideoRender* _videoView;
-    TBExampleVideoCapture* _defaultVideoCapture;
-}
+@interface TBExamplePublisher ()
+@property (strong, nonatomic) TBExampleVideoRender* videoView;
+@property (strong, nonatomic) TBExampleVideoCapture* defaultVideoCapture;
+@end
 
-@synthesize view = _videoView;
-
-#pragma mark - Object Lifecycle
+@implementation TBExamplePublisher
 
 - (id)init {
     self = [self initWithDelegate:nil name:nil];
@@ -25,6 +23,7 @@
     }
     return self;
 }
+
 - (id)initWithDelegate:(id<OTPublisherDelegate>)delegate {
     self = [self initWithDelegate:delegate name:nil];
     if (self) {
@@ -38,59 +37,55 @@
 {
     self = [super initWithDelegate:delegate name:name];
     if (self) {
-        TBExampleVideoCapture* videoCapture =
-        [[[TBExampleVideoCapture alloc] init] autorelease];
+        TBExampleVideoCapture* videoCapture = [[TBExampleVideoCapture alloc] init];
         [self setVideoCapture:videoCapture];
         
-        _videoView =
-        [[TBExampleVideoRender alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+        _videoView = [[TBExampleVideoRender alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
         // Set mirroring only if the front camera is being used.
-        [_videoView setMirroring:
-         (AVCaptureDevicePositionFront == videoCapture.cameraPosition)];
+        [_videoView setMirroring:(AVCaptureDevicePositionFront == videoCapture.cameraPosition)];
         [self setVideoRender:_videoView];
     }
     return self;
 }
 
 - (void)dealloc {
-    [_videoView release];
-    _videoView = nil;
-    [_defaultVideoCapture removeObserver:self
+    self.videoView = nil;
+    [self.defaultVideoCapture removeObserver:self
                               forKeyPath:@"cameraPosition"
                                  context:nil];
-    [_defaultVideoCapture release];
-    _defaultVideoCapture = nil;
-    [super dealloc];
+    self.defaultVideoCapture = nil;
+}
+
+- (UIView *)view {
+    return self.videoView;
 }
 
 #pragma mark - Public API
 
 - (void)setCameraPosition:(AVCaptureDevicePosition)cameraPosition {
-    [_defaultVideoCapture setCameraPosition:cameraPosition];
+    [self.defaultVideoCapture setCameraPosition:cameraPosition];
 }
 
 - (AVCaptureDevicePosition)cameraPosition {
-    return [_defaultVideoCapture cameraPosition];
+    return [self.defaultVideoCapture cameraPosition];
 }
 
 #pragma mark - Overrides for public API
 
 - (void)setVideoCapture:(id<OTVideoCapture>)videoCapture {
     [super setVideoCapture:videoCapture];
-    [_defaultVideoCapture removeObserver:self
+    [self.defaultVideoCapture removeObserver:self
                               forKeyPath:@"cameraPosition"
                                  context:nil];
-    [_defaultVideoCapture release];
-    _defaultVideoCapture = nil;
+    self.defaultVideoCapture = nil;
     
     // Save the new instance if it's still compatible with the public contract
     // for defaultVideoCapture
     if ([videoCapture isKindOfClass:[TBExampleVideoCapture class]]) {
-        _defaultVideoCapture = (TBExampleVideoCapture*) videoCapture;
-        [_defaultVideoCapture retain];
+        self.defaultVideoCapture = (TBExampleVideoCapture*) videoCapture;
     }
     
-    [_defaultVideoCapture addObserver:self
+    [self.defaultVideoCapture addObserver:self
                            forKeyPath:@"cameraPosition"
                               options:NSKeyValueObservingOptionNew
                               context:nil];
@@ -102,7 +97,7 @@
 - (void)setPublishVideo:(BOOL)publishVideo {
     [super setPublishVideo:publishVideo];
     if (!publishVideo) {
-        [_videoView clearRenderBuffer];
+        [self.videoView clearRenderBuffer];
     }
 }
 
