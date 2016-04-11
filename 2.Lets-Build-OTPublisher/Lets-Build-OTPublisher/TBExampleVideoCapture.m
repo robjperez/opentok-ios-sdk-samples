@@ -276,11 +276,11 @@ double _blackFrameTimeStarted;
 
 - (void)updateCaptureFormatWithWidth:(uint32_t)width height:(uint32_t)height
 {
-    _captureWidth = width;
-    _captureHeight = height;
-    [_videoFrame setFormat:[OTVideoFormat
-                            videoFormatNV12WithWidth:_captureWidth
-                            height:_captureHeight]];
+    self.captureWidth = width;
+    self.captureHeight = height;
+    [self.videoFrame setFormat:[OTVideoFormat
+                            videoFormatNV12WithWidth:self.captureWidth
+                            height:self.captureHeight]];
     
 }
 
@@ -289,7 +289,7 @@ double _blackFrameTimeStarted;
 }
 
 - (void) setCaptureSessionPreset:(NSString*)preset {
-    dispatch_sync(_capture_queue, ^{
+    dispatch_sync(self.capture_queue, ^{
         AVCaptureSession *session = [self captureSession];
         
         if ([session canSetSessionPreset:preset] &&
@@ -297,7 +297,7 @@ double _blackFrameTimeStarted;
             
             [self.captureSession beginConfiguration];
             self.captureSession.sessionPreset = preset;
-            _capturePreset = preset;
+            self.capturePreset = preset;
             
             [self.videoOutput setVideoSettings:
              [NSDictionary dictionaryWithObjectsAndKeys:
@@ -386,7 +386,7 @@ double _blackFrameTimeStarted;
 - (void)releaseCapture {
     [self stopCapture];
     [self.videoOutput setSampleBufferDelegate:nil queue:NULL];
-    dispatch_sync(_capture_queue, ^() {
+    dispatch_sync(self.capture_queue, ^() {
         [self.captureSession stopRunning];
     });
     
@@ -453,7 +453,7 @@ double _blackFrameTimeStarted;
       [NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange]
                                  forKey:(id)kCVPixelBufferPixelFormatTypeKey]];
     
-    [self.videoOutput setSampleBufferDelegate:self queue:_capture_queue];
+    [self.videoOutput setSampleBufferDelegate:self queue:self.capture_queue];
     
     [self.captureSession addOutput:self.videoOutput];
     
@@ -467,21 +467,21 @@ double _blackFrameTimeStarted;
     // OPENTOK-27013, OPENTOK-26905
     dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW,
                                           0.1 * NSEC_PER_SEC);
-    dispatch_after(delay,_capture_queue,^{
+    dispatch_after(delay,self.capture_queue,^{
         [self.captureSession startRunning];
     });
 
 }
 
 - (void)initCapture {
-    dispatch_async(_capture_queue, ^{
+    dispatch_async(self.capture_queue, ^{
         [self setupAudioVideoSession];
     });
 }
 
 - (void)initBlackFrameSender {
     _blackFrameTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
-                                              0, 0, _capture_queue);
+                                              0, 0, self.capture_queue);
     int blackFrameWidth = 320;
     int blackFrameHeight = 240;
     [self updateCaptureFormatWithWidth:blackFrameWidth height:blackFrameHeight];
@@ -502,26 +502,26 @@ double _blackFrameTimeStarted;
                                   250ull * NSEC_PER_MSEC,
                                   1ull * NSEC_PER_MSEC);
         dispatch_source_set_event_handler(_blackFrameTimer, ^{
-            if (!_capturing) {
+            if (!self.capturing) {
                 return;
             }
             
             double now = CACurrentMediaTime();
-            _videoFrame.timestamp =
+            self.videoFrame.timestamp =
             CMTimeMake((now - _blackFrameTimeStarted) * 90000, 90000);
-            _videoFrame.format.imageWidth = blackFrameWidth;
-            _videoFrame.format.imageHeight = blackFrameHeight;
+            self.videoFrame.format.imageWidth = blackFrameWidth;
+            self.videoFrame.format.imageHeight = blackFrameHeight;
             
-            _videoFrame.format.estimatedFramesPerSecond = 4;
-            _videoFrame.format.estimatedCaptureDelay = 0;
-            _videoFrame.orientation = OTVideoOrientationUp;
+            self.videoFrame.format.estimatedFramesPerSecond = 4;
+            self.videoFrame.format.estimatedCaptureDelay = 0;
+            self.videoFrame.orientation = OTVideoOrientationUp;
             
-            [_videoFrame clearPlanes];
+            [self.videoFrame clearPlanes];
             
-            [_videoFrame.planes addPointer:yPlane];
-            [_videoFrame.planes addPointer:uvPlane];
+            [self.videoFrame.planes addPointer:yPlane];
+            [self.videoFrame.planes addPointer:uvPlane];
             
-            [_videoCaptureConsumer consumeFrame:_videoFrame];
+            [self.videoCaptureConsumer consumeFrame:self.videoFrame];
         });
         
         dispatch_resume(_blackFrameTimer);
@@ -530,16 +530,16 @@ double _blackFrameTimeStarted;
 }
 
 - (BOOL) isCaptureStarted {
-    return (self.captureSession || _blackFrameTimer) && _capturing;
+    return (self.captureSession || _blackFrameTimer) && self.capturing;
 }
 
 - (int32_t) startCapture {
-    _capturing = YES;
+    self.capturing = YES;
     return 0;
 }
 
 - (int32_t) stopCapture {
-    _capturing = NO;
+    self.capturing = NO;
     return 0;
 }
 
@@ -707,7 +707,7 @@ double _blackFrameTimeStarted;
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
     
-    if (!(_capturing && _videoCaptureConsumer)) {
+    if (!(self.capturing && self.videoCaptureConsumer)) {
         return;
     }
     
@@ -715,43 +715,43 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CVPixelBufferLockBaseAddress(imageBuffer, 0);
     
-    _videoFrame.timestamp = time;
+    self.videoFrame.timestamp = time;
     uint32_t height = (uint32_t)CVPixelBufferGetHeight(imageBuffer);
     uint32_t width = (uint32_t)CVPixelBufferGetWidth(imageBuffer);
-    if (width != _captureWidth || height != _captureHeight) {
+    if (width != self.captureWidth || height != self.captureHeight) {
         [self updateCaptureFormatWithWidth:width height:height];
     }
-    _videoFrame.format.imageWidth = width;
-    _videoFrame.format.imageHeight = height;
+    self.videoFrame.format.imageWidth = width;
+    self.videoFrame.format.imageHeight = height;
     CMTime minFrameDuration;
     
     minFrameDuration = self.videoInput.device.activeVideoMinFrameDuration;
     
-    _videoFrame.format.estimatedFramesPerSecond =
+    self.videoFrame.format.estimatedFramesPerSecond =
     minFrameDuration.timescale / minFrameDuration.value;
     // TODO: how do we measure this from AVFoundation?
-    _videoFrame.format.estimatedCaptureDelay = 100;
-    _videoFrame.orientation = [self currentDeviceOrientation];
+    self.videoFrame.format.estimatedCaptureDelay = 100;
+    self.videoFrame.orientation = [self currentDeviceOrientation];
     
-    [_videoFrame clearPlanes];
+    [self.videoFrame clearPlanes];
     uint8_t* sanitizedImageBuffer = NULL;
     
     if (!CVPixelBufferIsPlanar(imageBuffer))
     {
-        [_videoFrame.planes
+        [self.videoFrame.planes
          addPointer:CVPixelBufferGetBaseAddress(imageBuffer)];
     } else if ([self imageBufferIsSanitary:imageBuffer]) {
         for (int i = 0; i < CVPixelBufferGetPlaneCount(imageBuffer); i++) {
-            [_videoFrame.planes addPointer:
+            [self.videoFrame.planes addPointer:
              CVPixelBufferGetBaseAddressOfPlane(imageBuffer, i)];
         }
     } else {
         [self sanitizeImageBuffer:imageBuffer
                              data:&sanitizedImageBuffer
-                           planes:_videoFrame.planes];
+                           planes:self.videoFrame.planes];
     }
     
-    [_videoCaptureConsumer consumeFrame:_videoFrame];
+    [self.videoCaptureConsumer consumeFrame:self.videoFrame];
     
     free(sanitizedImageBuffer);
     
