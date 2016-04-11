@@ -16,14 +16,7 @@
 		D44261F0185FC8D600E23699 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D44261EE185FC8D600E23699 /* InfoPlist.strings */; };
 		D44261F2185FC8D600E23699 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D44261F1185FC8D600E23699 /* main.m */; };
 		D44261F6185FC8D600E23699 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D44261F5185FC8D600E23699 /* AppDelegate.m */; };
-		D44261F9185FC8D600E23699 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D44261F7185FC8D600E23699 /* Main_iPhone.storyboard */; };
-		D44261FC185FC8D600E23699 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D44261FA185FC8D600E23699 /* Main_iPad.storyboard */; };
 		D44261FF185FC8D600E23699 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D44261FE185FC8D600E23699 /* ViewController.m */; };
-		D4426201185FC8D600E23699 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4426200185FC8D600E23699 /* Images.xcassets */; };
-		D4426209185FC8D600E23699 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44261E5185FC8D600E23699 /* Foundation.framework */; };
-		D442620A185FC8D600E23699 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44261E9185FC8D600E23699 /* UIKit.framework */; };
-		D4426212185FC8D600E23699 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D4426210185FC8D600E23699 /* InfoPlist.strings */; };
-		D4426214185FC8D600E23699 /* Live_Photo_CaptureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D4426213185FC8D600E23699 /* Live_Photo_CaptureTests.m */; };
 		D442621E185FC9F800E23699 /* OpenTok.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D442621D185FC9F800E23699 /* OpenTok.framework */; };
 		D4426223185FCB8F00E23699 /* TBExamplePhotoVideoCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = D4426222185FCB8F00E23699 /* TBExamplePhotoVideoCapture.m */; };
 		D4426234185FCDA700E23699 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D4426227185FCDA700E23699 /* libsqlite3.dylib */; };
@@ -41,17 +34,9 @@
 		D4426246185FCF2900E23699 /* TBExampleVideoRender.m in Sources */ = {isa = PBXBuildFile; fileRef = D4426244185FCF2900E23699 /* TBExampleVideoRender.m */; };
 		D4426248185FCF6A00E23699 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D4426247185FCF6A00E23699 /* README.md */; };
 		D4F8FD9D194125D100364672 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4F8FD9C194125D100364672 /* GLKit.framework */; };
+		F8B777F11CBBEFFD00B0DAFD /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8B777F01CBBEFFD00B0DAFD /* Launch Screen.storyboard */; };
+		F8B777F41CBBF28400B0DAFD /* TBEAGLVideoRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B777F31CBBF28400B0DAFD /* TBEAGLVideoRenderer.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D442620B185FC8D600E23699 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D44261DA185FC8D600E23699 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D44261E1185FC8D600E23699;
-			remoteInfo = "Live-Photo-Capture";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		010D3F96249136D12074DC44 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,15 +54,8 @@
 		D44261F3185FC8D600E23699 /* Live-Photo-Capture-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Live-Photo-Capture-Prefix.pch"; sourceTree = "<group>"; };
 		D44261F4185FC8D600E23699 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D44261F5185FC8D600E23699 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		D44261F8185FC8D600E23699 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		D44261FB185FC8D600E23699 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		D44261FD185FC8D600E23699 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		D44261FE185FC8D600E23699 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		D4426200185FC8D600E23699 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		D4426206185FC8D600E23699 /* Live-Photo-CaptureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Live-Photo-CaptureTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D442620F185FC8D600E23699 /* Live-Photo-CaptureTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Live-Photo-CaptureTests-Info.plist"; sourceTree = "<group>"; };
-		D4426211185FC8D600E23699 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		D4426213185FC8D600E23699 /* Live_Photo_CaptureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Live_Photo_CaptureTests.m; sourceTree = "<group>"; };
 		D442621D185FC9F800E23699 /* OpenTok.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenTok.framework; sourceTree = "<group>"; };
 		D442621F185FCB6D00E23699 /* TBExamplePublisher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TBExamplePublisher.h; path = "../2.Lets-Build-OTPublisher/Lets-Build-OTPublisher/TBExamplePublisher.h"; sourceTree = "<group>"; };
 		D4426220185FCB6D00E23699 /* TBExampleVideoCapture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TBExampleVideoCapture.h; path = "../2.Lets-Build-OTPublisher/Lets-Build-OTPublisher/TBExampleVideoCapture.h"; sourceTree = "<group>"; };
@@ -98,6 +76,9 @@
 		D4426244185FCF2900E23699 /* TBExampleVideoRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBExampleVideoRender.m; path = "../2.Lets-Build-OTPublisher/Lets-Build-OTPublisher/TBExampleVideoRender.m"; sourceTree = "<group>"; };
 		D4426247185FCF6A00E23699 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D4F8FD9C194125D100364672 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		F8B777F01CBBEFFD00B0DAFD /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		F8B777F21CBBF28400B0DAFD /* TBEAGLVideoRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBEAGLVideoRenderer.h; path = "../2.Lets-Build-OTPublisher/Lets-Build-OTPublisher/TBEAGLVideoRenderer.h"; sourceTree = "<group>"; };
+		F8B777F31CBBF28400B0DAFD /* TBEAGLVideoRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBEAGLVideoRenderer.m; path = "../2.Lets-Build-OTPublisher/Lets-Build-OTPublisher/TBEAGLVideoRenderer.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,15 +106,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D4426203185FC8D600E23699 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D442620A185FC8D600E23699 /* UIKit.framework in Frameworks */,
-				D4426209185FC8D600E23699 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -152,7 +124,6 @@
 				D4426247185FCF6A00E23699 /* README.md */,
 				D4426240185FCF0100E23699 /* Project 2 - Let's Build OTPublisher */,
 				D44261EB185FC8D600E23699 /* Live-Photo-Capture */,
-				D442620D185FC8D600E23699 /* Live-Photo-CaptureTests */,
 				D44261E4185FC8D600E23699 /* Frameworks */,
 				D44261E3185FC8D600E23699 /* Products */,
 				CB1A8A04673054F630290E19 /* Pods */,
@@ -163,7 +134,6 @@
 			isa = PBXGroup;
 			children = (
 				D44261E2185FC8D600E23699 /* Live-Photo-Capture.app */,
-				D4426206185FC8D600E23699 /* Live-Photo-CaptureTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -199,11 +169,8 @@
 				D4426222185FCB8F00E23699 /* TBExamplePhotoVideoCapture.m */,
 				D44261F4185FC8D600E23699 /* AppDelegate.h */,
 				D44261F5185FC8D600E23699 /* AppDelegate.m */,
-				D44261F7185FC8D600E23699 /* Main_iPhone.storyboard */,
-				D44261FA185FC8D600E23699 /* Main_iPad.storyboard */,
 				D44261FD185FC8D600E23699 /* ViewController.h */,
 				D44261FE185FC8D600E23699 /* ViewController.m */,
-				D4426200185FC8D600E23699 /* Images.xcassets */,
 				D44261EC185FC8D600E23699 /* Supporting Files */,
 			);
 			path = "Live-Photo-Capture";
@@ -216,24 +183,7 @@
 				D44261EE185FC8D600E23699 /* InfoPlist.strings */,
 				D44261F1185FC8D600E23699 /* main.m */,
 				D44261F3185FC8D600E23699 /* Live-Photo-Capture-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		D442620D185FC8D600E23699 /* Live-Photo-CaptureTests */ = {
-			isa = PBXGroup;
-			children = (
-				D4426213185FC8D600E23699 /* Live_Photo_CaptureTests.m */,
-				D442620E185FC8D600E23699 /* Supporting Files */,
-			);
-			path = "Live-Photo-CaptureTests";
-			sourceTree = "<group>";
-		};
-		D442620E185FC8D600E23699 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				D442620F185FC8D600E23699 /* Live-Photo-CaptureTests-Info.plist */,
-				D4426210185FC8D600E23699 /* InfoPlist.strings */,
+				F8B777F01CBBEFFD00B0DAFD /* Launch Screen.storyboard */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -241,6 +191,8 @@
 		D4426240185FCF0100E23699 /* Project 2 - Let's Build OTPublisher */ = {
 			isa = PBXGroup;
 			children = (
+				F8B777F21CBBF28400B0DAFD /* TBEAGLVideoRenderer.h */,
+				F8B777F31CBBF28400B0DAFD /* TBEAGLVideoRenderer.m */,
 				D442621F185FCB6D00E23699 /* TBExamplePublisher.h */,
 				D442623E185FCEFB00E23699 /* TBExamplePublisher.m */,
 				D4426220185FCB6D00E23699 /* TBExampleVideoCapture.h */,
@@ -263,6 +215,7 @@
 				D44261DF185FC8D600E23699 /* Frameworks */,
 				D44261E0185FC8D600E23699 /* Resources */,
 				DA57C878154D9C8A1CB3F51A /* Copy Pods Resources */,
+				78AD6AE9125A1DA1B82741F1 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -273,24 +226,6 @@
 			productReference = D44261E2185FC8D600E23699 /* Live-Photo-Capture.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D4426205185FC8D600E23699 /* Live-Photo-CaptureTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D442621A185FC8D600E23699 /* Build configuration list for PBXNativeTarget "Live-Photo-CaptureTests" */;
-			buildPhases = (
-				D4426202185FC8D600E23699 /* Sources */,
-				D4426203185FC8D600E23699 /* Frameworks */,
-				D4426204185FC8D600E23699 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D442620C185FC8D600E23699 /* PBXTargetDependency */,
-			);
-			name = "Live-Photo-CaptureTests";
-			productName = "Live-Photo-CaptureTests";
-			productReference = D4426206185FC8D600E23699 /* Live-Photo-CaptureTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -299,11 +234,6 @@
 			attributes = {
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "TokBox, Inc.";
-				TargetAttributes = {
-					D4426205185FC8D600E23699 = {
-						TestTargetID = D44261E1185FC8D600E23699;
-					};
-				};
 			};
 			buildConfigurationList = D44261DD185FC8D600E23699 /* Build configuration list for PBXProject "Live-Photo-Capture" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -319,7 +249,6 @@
 			projectRoot = "";
 			targets = (
 				D44261E1185FC8D600E23699 /* Live-Photo-Capture */,
-				D4426205185FC8D600E23699 /* Live-Photo-CaptureTests */,
 			);
 		};
 /* End PBXProject section */
@@ -329,25 +258,30 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D44261FC185FC8D600E23699 /* Main_iPad.storyboard in Resources */,
-				D4426201185FC8D600E23699 /* Images.xcassets in Resources */,
+				F8B777F11CBBEFFD00B0DAFD /* Launch Screen.storyboard in Resources */,
 				D4426248185FCF6A00E23699 /* README.md in Resources */,
-				D44261F9185FC8D600E23699 /* Main_iPhone.storyboard in Resources */,
 				D44261F0185FC8D600E23699 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D4426204185FC8D600E23699 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D4426212185FC8D600E23699 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		78AD6AE9125A1DA1B82741F1 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		DA57C878154D9C8A1CB3F51A /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -393,56 +327,17 @@
 				D44261F6185FC8D600E23699 /* AppDelegate.m in Sources */,
 				D442623F185FCEFB00E23699 /* TBExamplePublisher.m in Sources */,
 				D44261F2185FC8D600E23699 /* main.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D4426202185FC8D600E23699 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D4426214185FC8D600E23699 /* Live_Photo_CaptureTests.m in Sources */,
+				F8B777F41CBBF28400B0DAFD /* TBEAGLVideoRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D442620C185FC8D600E23699 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D44261E1185FC8D600E23699 /* Live-Photo-Capture */;
-			targetProxy = D442620B185FC8D600E23699 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D44261EE185FC8D600E23699 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				D44261EF185FC8D600E23699 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		D44261F7185FC8D600E23699 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D44261F8185FC8D600E23699 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		D44261FA185FC8D600E23699 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D44261FB185FC8D600E23699 /* Base */,
-			);
-			name = Main_iPad.storyboard;
-			sourceTree = "<group>";
-		};
-		D4426210185FC8D600E23699 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D4426211185FC8D600E23699 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -526,9 +421,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7A1CE4C39F459356ECE734B0 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -542,6 +435,7 @@
 					"${SRCROOT}/../2.Lets-Build-OTPublisher/**",
 				);
 				INFOPLIST_FILE = "Live-Photo-Capture/Live-Photo-Capture-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -551,9 +445,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A8EC553B5E91745453413441 /* Pods.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -567,48 +459,9 @@
 					"${SRCROOT}/../2.Lets-Build-OTPublisher/**",
 				);
 				INFOPLIST_FILE = "Live-Photo-Capture/Live-Photo-Capture-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		D442621B185FC8D600E23699 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Live-Photo-Capture.app/Live-Photo-Capture";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Live-Photo-Capture/Live-Photo-Capture-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Live-Photo-CaptureTests/Live-Photo-CaptureTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		D442621C185FC8D600E23699 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Live-Photo-Capture.app/Live-Photo-Capture";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Live-Photo-Capture/Live-Photo-Capture-Prefix.pch";
-				INFOPLIST_FILE = "Live-Photo-CaptureTests/Live-Photo-CaptureTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -629,15 +482,6 @@
 			buildConfigurations = (
 				D4426218185FC8D600E23699 /* Debug */,
 				D4426219185FC8D600E23699 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D442621A185FC8D600E23699 /* Build configuration list for PBXNativeTarget "Live-Photo-CaptureTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D442621B185FC8D600E23699 /* Debug */,
-				D442621C185FC8D600E23699 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

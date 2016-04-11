@@ -21,6 +21,8 @@
 @property (nonatomic, assign) NSString* captureSessionPreset;
 @property (readonly) NSArray* availableCaptureSessionPresets;
 
+@property (strong, nonatomic) dispatch_queue_t capture_queue;
+
 @property (nonatomic, assign) double activeFrameRate;
 - (BOOL)isAvailableActiveFrameRate:(double)frameRate;
 

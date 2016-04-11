@@ -11,20 +11,19 @@
 #import "TBExampleSubscriber.h"
 #import "TBExamplePhotoVideoCapture.h"
 
+static double kWidgetHeight = 120;
+static double kWidgetWidth = 160;
+
 @interface ViewController ()
 <OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate>
-
+@property(strong, nonatomic) OTSession* session;
+@property(strong, nonatomic) TBExamplePublisher* publisher;
+@property(strong, nonatomic) TBExampleSubscriber* subscriber;
+@property(strong, nonatomic) TBExamplePhotoVideoCapture* myPhotoVideoCaptureModule;
+@property(strong, nonatomic) UIImageView* myImageView;
 @end
 
-@implementation ViewController {
-    OTSession* _session;
-    TBExamplePublisher* _publisher;
-    TBExampleSubscriber* _subscriber;
-    TBExamplePhotoVideoCapture* _myPhotoVideoCaptureModule;
-    UIImageView* _myImageView;
-}
-static double widgetHeight = 120;
-static double widgetWidth = 160;
+@implementation ViewController
 
 // *** Fill the following variables using your own Project info  ***
 // ***          https://dashboard.tokbox.com/projects            ***
@@ -45,10 +44,10 @@ static bool subscribeToSelf = YES;
     [super viewDidLoad];
     
     // Make a UIImageView to hold the output of the photo snapshot
-    _myImageView = [[UIImageView alloc]
-                    initWithFrame:CGRectMake(widgetWidth, 0, widgetHeight,
-                                             widgetWidth)];
-    [self.view addSubview:_myImageView];
+    self.myImageView = [[UIImageView alloc]
+                    initWithFrame:CGRectMake(kWidgetWidth, 0, kWidgetHeight,
+                                             kWidgetWidth)];
+    [self.view addSubview:self.myImageView];
     
     // Bind the whole screen to a gesture recognizer - tap on the screen and
     //  we'll take a picture!
@@ -56,9 +55,8 @@ static bool subscribeToSelf = YES;
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self.view addGestureRecognizer:singleFingerTap];
-    [singleFingerTap release];
     
-    _session = [[OTSession alloc] initWithApiKey:kApiKey
+    self.session = [[OTSession alloc] initWithApiKey:kApiKey
                                        sessionId:kSessionId
                                            delegate:self];
     [self doConnect];
@@ -72,15 +70,7 @@ static bool subscribeToSelf = YES;
 - (BOOL)shouldAutorotateToInterfaceOrientation:
 (UIInterfaceOrientation)interfaceOrientation
 {
-    return YES;
-    // Return YES for supported orientations
-    if (UIUserInterfaceIdiomPhone == [[UIDevice currentDevice]
-                                      userInterfaceIdiom])
-    {
-        return NO;
-    } else {
-        return YES;
-    }
+    return YES; 
 }
 
 #pragma mark - Gesture recognizer
@@ -90,13 +80,13 @@ static bool subscribeToSelf = YES;
  * to take a picture, then display the results.
  */
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    if (_myPhotoVideoCaptureModule.isTakingPhoto) {
+    if (self.myPhotoVideoCaptureModule.isTakingPhoto) {
         return;
     }
-    [_myPhotoVideoCaptureModule takePhotoWithCompletionHandler:
+    [self.myPhotoVideoCaptureModule takePhotoWithCompletionHandler:
      ^(UIImage* image) {
-        [_myImageView setImage:image];
-        [_myImageView setNeedsDisplay];
+        [self.myImageView setImage:image];
+        [self.myImageView setNeedsDisplay];
     }];
 }
 
@@ -109,7 +99,7 @@ static bool subscribeToSelf = YES;
 - (void)doConnect
 {
     OTError *error = nil;
-    [_session connectWithToken:kToken error:&error];
+    [self.session connectWithToken:kToken error:&error];
     if (error)
     {
         [self showAlert:[error localizedDescription]];
@@ -125,21 +115,21 @@ static bool subscribeToSelf = YES;
 {
     // In this example, we'll be using our own video capture module that can
     // also support photo-quality image capture.
-    _myPhotoVideoCaptureModule = [[TBExamplePhotoVideoCapture alloc] init];
-    _publisher = [[TBExamplePublisher alloc]
+    self.myPhotoVideoCaptureModule = [[TBExamplePhotoVideoCapture alloc] init];
+    self.publisher = [[TBExamplePublisher alloc]
                   initWithDelegate:self
                   name:[[UIDevice currentDevice] name]];
-    [_publisher setVideoCapture:_myPhotoVideoCaptureModule];
+    [self.publisher setVideoCapture:self.myPhotoVideoCaptureModule];
     
     OTError *error = nil;
-    [_session publish:_publisher error:&error];
+    [self.session publish:self.publisher error:&error];
     if (error)
     {
         [self showAlert:[error localizedDescription]];
     }
 
-    [_publisher.view setFrame:CGRectMake(0, 0, widgetWidth, widgetHeight)];
-    [self.view addSubview:_publisher.view];
+    [self.publisher.view setFrame:CGRectMake(0, 0, kWidgetWidth, kWidgetHeight)];
+    [self.view addSubview:self.publisher.view];
 }
 
 /**
@@ -147,8 +137,8 @@ static bool subscribeToSelf = YES;
  * be attached to the session any more.
  */
 - (void)cleanupPublisher {
-    [_publisher.view removeFromSuperview];
-    _publisher = nil;
+    [self.publisher.view removeFromSuperview];
+    self.publisher = nil;
     // this is a good place to notify the end-user that publishing has stopped.
 }
 
@@ -160,10 +150,10 @@ static bool subscribeToSelf = YES;
  */
 - (void)doSubscribe:(OTStream*)stream
 {
-    _subscriber = [[TBExampleSubscriber alloc] initWithStream:stream
+    self.subscriber = [[TBExampleSubscriber alloc] initWithStream:stream
                                                      delegate:self];
     OTError *error = nil;;
-    [_session subscribe:_subscriber error:&error];
+    [self.session subscribe:self.subscriber error:&error];
     if (error)
     {
         [self showAlert:[error localizedDescription]];
@@ -179,8 +169,8 @@ static bool subscribeToSelf = YES;
  */
 - (void)cleanupSubscriber
 {
-    [_subscriber.view removeFromSuperview];
-    _subscriber = nil;
+    [self.subscriber.view removeFromSuperview];
+    self.subscriber = nil;
 }
 
 # pragma mark - OTSession delegate callbacks
@@ -206,7 +196,7 @@ static bool subscribeToSelf = YES;
 {
     NSLog(@"session streamCreated (%@)", stream.streamId);
     
-    if (nil == _subscriber && !subscribeToSelf)
+    if (nil == self.subscriber && !subscribeToSelf)
     {
         [self doSubscribe:stream];
     }
@@ -217,7 +207,7 @@ streamDestroyed:(OTStream *)stream
 {
     NSLog(@"session streamDestroyed (%@)", stream.streamId);
     
-    if ([_subscriber.stream.streamId isEqualToString:stream.streamId])
+    if ([self.subscriber.stream.streamId isEqualToString:stream.streamId])
     {
         [self cleanupSubscriber];
     }
@@ -233,7 +223,7 @@ connectionCreated:(OTConnection *)connection
 connectionDestroyed:(OTConnection *)connection
 {
     NSLog(@"session connectionDestroyed (%@)", connection.connectionId);
-    if ([_subscriber.stream.connection.connectionId
+    if ([self.subscriber.stream.connection.connectionId
          isEqualToString:connection.connectionId])
     {
         [self cleanupSubscriber];
@@ -252,9 +242,9 @@ didFailWithError:(OTError*)error
 {
     NSLog(@"subscriberDidConnectToStream (%@)",
           subscriber.stream.connection.connectionId);
-    [_subscriber.view setFrame:CGRectMake(0, widgetHeight, widgetWidth,
-                                          widgetHeight)];
-    [self.view addSubview:_subscriber.view];
+    [self.subscriber.view setFrame:CGRectMake(0, kWidgetHeight, kWidgetWidth,
+                                          kWidgetHeight)];
+    [self.view addSubview:self.subscriber.view];
 }
 
 - (void)subscriber:(OTSubscriberKit*)subscriber
@@ -270,7 +260,7 @@ didFailWithError:(OTError*)error
 - (void)publisher:(OTPublisherKit *)publisher
     streamCreated:(OTStream *)stream
 {
-    if (nil == _subscriber && subscribeToSelf)
+    if (nil == self.subscriber && subscribeToSelf)
     {
         [self doSubscribe:stream];
     }
@@ -279,7 +269,7 @@ didFailWithError:(OTError*)error
 - (void)publisher:(OTPublisherKit*)publisher
   streamDestroyed:(OTStream *)stream
 {
-    if ([_subscriber.stream.streamId isEqualToString:stream.streamId])
+    if ([self.subscriber.stream.streamId isEqualToString:stream.streamId])
     {
         [self cleanupSubscriber];
     }
@@ -295,11 +285,11 @@ didFailWithError:(OTError*)error
 {
     // show alertview on main UI
 	dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Message from video session"
-                                                         message:string
-                                                        delegate:self
-                                               cancelButtonTitle:@"OK"
-                                               otherButtonTitles:nil] autorelease];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Message from video session"
+                                                        message:string
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
         [alert show];
     });
 }

@@ -10,22 +10,24 @@
 #import <UIKit/UIKit.h>
 #import <ImageIO/CGImageProperties.h>
 
-@implementation TBExamplePhotoVideoCapture {
-    BOOL _isTakingPhoto;
-    AVCaptureStillImageOutput* _stillImageOutput;
-}
+@interface TBExamplePhotoVideoCapture ()
+@property(assign, nonatomic) BOOL isTakingPhoto;
+@property(strong, nonatomic) AVCaptureStillImageOutput* stillImageOutput;
+@end
+
+@implementation TBExamplePhotoVideoCapture
 
 - (NSString*)pauseVideoCaptureForPhoto {
     [self.captureSession beginConfiguration];
     NSString* oldPreset = self.captureSession.sessionPreset;
     [self.captureSession setSessionPreset:AVCaptureSessionPresetPhoto];
-    _stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+    self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
     NSDictionary *outputSettings = [[NSDictionary alloc]
                                     initWithObjectsAndKeys:
                                     AVVideoCodecJPEG, AVVideoCodecKey,
                                     nil];
-    [_stillImageOutput setOutputSettings:outputSettings];
-    [self.captureSession addOutput:_stillImageOutput];
+    [self.stillImageOutput setOutputSettings:outputSettings];
+    [self.captureSession addOutput:self.stillImageOutput];
     [self.captureSession commitConfiguration];
     double startTime = CACurrentMediaTime();
     // if your images are coming out dark, you might try increasing this timeout
@@ -41,8 +43,7 @@
 - (void)resumeVideoCapture:(NSString*)oldPreset {
     [self.captureSession beginConfiguration];
     [self.captureSession setSessionPreset:oldPreset];
-    [self.captureSession removeOutput:_stillImageOutput];
-    [_stillImageOutput release];
+    [self.captureSession removeOutput:self.stillImageOutput];
     [self.captureSession commitConfiguration];
 }
 
@@ -50,7 +51,7 @@
 - (UIImage*)doPhotoCapture {
     
     AVCaptureConnection *videoConnection = nil;
-    for (AVCaptureConnection *connection in _stillImageOutput.connections)
+    for (AVCaptureConnection *connection in self.stillImageOutput.connections)
     {
         for (AVCaptureInputPort *port in [connection inputPorts])
         {
@@ -68,7 +69,7 @@
     
     dispatch_semaphore_t imageCaptureSemaphore = dispatch_semaphore_create(0);
     __block UIImage* resultImage = nil;
-    [_stillImageOutput
+    [self.stillImageOutput
      captureStillImageAsynchronouslyFromConnection:videoConnection
      completionHandler: ^(CMSampleBufferRef imageSampleBuffer,
                           NSError *error)
@@ -83,8 +84,6 @@
     dispatch_time_t timeout = dispatch_walltime(DISPATCH_TIME_NOW,
                                                 30 * NSEC_PER_SEC);
     dispatch_semaphore_wait(imageCaptureSemaphore, timeout);
-    dispatch_release(imageCaptureSemaphore);
-    
     return resultImage;
 }
 
@@ -92,20 +91,16 @@
     if (self.isTakingPhoto) {
         return;
     }
-    _isTakingPhoto = YES;
-    dispatch_async(_capture_queue, ^() {
+    self.isTakingPhoto = YES;
+    dispatch_async(self.capture_queue, ^() {
         NSString* oldPreset = [self pauseVideoCaptureForPhoto];
         UIImage* result = [self doPhotoCapture];
         dispatch_async(dispatch_get_main_queue(), ^() {
-            block([result autorelease]);
+            block(result);
         });
         [self resumeVideoCapture:oldPreset];
-        _isTakingPhoto = NO;
+        self.isTakingPhoto = NO;
     });
-}
-
-- (BOOL)isTakingPhoto {
-    return _isTakingPhoto;
 }
 
 @end

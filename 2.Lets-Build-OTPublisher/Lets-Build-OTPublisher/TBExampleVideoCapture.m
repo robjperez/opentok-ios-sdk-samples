@@ -32,7 +32,6 @@
 @property (strong, nonatomic) NSString* capturePreset;
 @property (assign) BOOL capturing;
 @property (strong, nonatomic) dispatch_source_t blackFrameTimer;
-@property (strong, nonatomic) dispatch_queue_t capture_queue;
 @end
 
 uint8_t* _blackFrame;
