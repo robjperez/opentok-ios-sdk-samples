@@ -12,10 +12,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    NSLog(@"%@", NSStringFromCGRect(self.window.bounds));
+    
     ViewController *vc = [[ViewController alloc] init];
     vc.view.frame = self.window.bounds;
     vc.view.backgroundColor = [UIColor whiteColor];
+    
     self.window.rootViewController = vc;
     [self.window makeKeyAndVisible];
     return YES;

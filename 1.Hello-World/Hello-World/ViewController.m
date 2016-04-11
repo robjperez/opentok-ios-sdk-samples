@@ -8,18 +8,17 @@
 #import "ViewController.h"
 #import <OpenTok/OpenTok.h>
 
-@interface ViewController ()
-<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate>
+static double kWidgetHeight = 240;
+static double kWidgetWidth = 320;
 
+
+@interface ViewController () <OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate>
+@property (strong, nonatomic) OTSession* session;
+@property (strong, nonatomic) OTPublisher* publisher;
+@property (strong, nonatomic) OTSubscriber* subscriber;
 @end
 
-@implementation ViewController {
-    OTSession* _session;
-    OTPublisher* _publisher;
-    OTSubscriber* _subscriber;
-}
-static double widgetHeight = 240;
-static double widgetWidth = 320;
+@implementation ViewController
 
 // *** Fill the following variables using your own Project info  ***
 // ***          https://dashboard.tokbox.com/projects            ***
@@ -41,7 +40,7 @@ static bool subscribeToSelf = NO;
     
     // Step 1: As the view comes into the foreground, initialize a new instance
     // of OTSession and begin the connection process.
-    _session = [[OTSession alloc] initWithApiKey:kApiKey
+    self.session = [[OTSession alloc] initWithApiKey:kApiKey
                                        sessionId:kSessionId
                                         delegate:self];
     [self doConnect];
@@ -55,14 +54,7 @@ static bool subscribeToSelf = NO;
 - (BOOL)shouldAutorotateToInterfaceOrientation:
 (UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    if (UIUserInterfaceIdiomPhone == [[UIDevice currentDevice]
-                                      userInterfaceIdiom])
-    {
-        return NO;
-    } else {
-        return YES;
-    }
+    return UIUserInterfaceIdiomPhone != [[UIDevice currentDevice] userInterfaceIdiom];
 }
 #pragma mark - OpenTok methods
 
@@ -74,9 +66,8 @@ static bool subscribeToSelf = NO;
 {
     OTError *error = nil;
     
-    [_session connectWithToken:kToken error:&error];
-    if (error)
-    {
+    [self.session connectWithToken:kToken error:&error];
+    if (error) {
         [self showAlert:[error localizedDescription]];
     }
 }
@@ -88,19 +79,18 @@ static bool subscribeToSelf = NO;
  */
 - (void)doPublish
 {
-    _publisher =
+    self.publisher =
     [[OTPublisher alloc] initWithDelegate:self
                                      name:[[UIDevice currentDevice] name]];
    
     OTError *error = nil;
-    [_session publish:_publisher error:&error];
-    if (error)
-    {
+    [self.session publish:self.publisher error:&error];
+    if (error) {
         [self showAlert:[error localizedDescription]];
     }
     
-    [self.view addSubview:_publisher.view];
-    [_publisher.view setFrame:CGRectMake(0, 0, widgetWidth, widgetHeight)];
+    [self.view addSubview:self.publisher.view];
+    [self.publisher.view setFrame:CGRectMake(0, 0, kWidgetWidth, kWidgetHeight)];
 }
 
 /**
@@ -108,8 +98,8 @@ static bool subscribeToSelf = NO;
  * be attached to the session any more.
  */
 - (void)cleanupPublisher {
-    [_publisher.view removeFromSuperview];
-    _publisher = nil;
+    [self.publisher.view removeFromSuperview];
+    self.publisher = nil;
     // this is a good place to notify the end-user that publishing has stopped.
 }
 
@@ -121,12 +111,11 @@ static bool subscribeToSelf = NO;
  */
 - (void)doSubscribe:(OTStream*)stream
 {
-    _subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
+    self.subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
     
     OTError *error = nil;
-    [_session subscribe:_subscriber error:&error];
-    if (error)
-    {
+    [self.session subscribe:self.subscriber error:&error];
+    if (error) {
         [self showAlert:[error localizedDescription]];
     }
 }
@@ -139,8 +128,8 @@ static bool subscribeToSelf = NO;
  */
 - (void)cleanupSubscriber
 {
-    [_subscriber.view removeFromSuperview];
-    _subscriber = nil;
+    [self.subscriber.view removeFromSuperview];
+    self.subscriber = nil;
 }
 
 # pragma mark - OTSession delegate callbacks
@@ -170,8 +159,7 @@ static bool subscribeToSelf = NO;
     
     // Step 3a: (if NO == subscribeToSelf): Begin subscribing to a stream we
     // have seen on the OpenTok session.
-    if (nil == _subscriber && !subscribeToSelf)
-    {
+    if (nil == self.subscriber && !subscribeToSelf) {
         [self doSubscribe:stream];
     }
 }
@@ -181,8 +169,7 @@ streamDestroyed:(OTStream *)stream
 {
     NSLog(@"session streamDestroyed (%@)", stream.streamId);
     
-    if ([_subscriber.stream.streamId isEqualToString:stream.streamId])
-    {
+    if ([self.subscriber.stream.streamId isEqualToString:stream.streamId]) {
         [self cleanupSubscriber];
     }
 }
@@ -197,7 +184,7 @@ connectionCreated:(OTConnection *)connection
 connectionDestroyed:(OTConnection *)connection
 {
     NSLog(@"session connectionDestroyed (%@)", connection.connectionId);
-    if ([_subscriber.stream.connection.connectionId
+    if ([self.subscriber.stream.connection.connectionId
          isEqualToString:connection.connectionId])
     {
         [self cleanupSubscriber];
@@ -216,10 +203,10 @@ didFailWithError:(OTError*)error
 {
     NSLog(@"subscriberDidConnectToStream (%@)",
           subscriber.stream.connection.connectionId);
-    assert(_subscriber == subscriber);
-    [_subscriber.view setFrame:CGRectMake(0, widgetHeight, widgetWidth,
-                                         widgetHeight)];
-    [self.view addSubview:_subscriber.view];
+    assert(self.subscriber == subscriber);
+    [self.subscriber.view setFrame:CGRectMake(0, kWidgetHeight, kWidgetWidth,
+                                         kWidgetHeight)];
+    [self.view addSubview:self.subscriber.view];
 }
 
 - (void)subscriber:(OTSubscriberKit*)subscriber
@@ -239,7 +226,7 @@ didFailWithError:(OTError*)error
     // all participants in the OpenTok session. We will attempt to subscribe to
     // our own stream. Expect to see a slight delay in the subscriber video and
     // an echo of the audio coming from the device microphone.
-    if (nil == _subscriber && subscribeToSelf)
+    if (nil == self.subscriber && subscribeToSelf)
     {
         [self doSubscribe:stream];
     }
@@ -248,7 +235,7 @@ didFailWithError:(OTError*)error
 - (void)publisher:(OTPublisherKit*)publisher
   streamDestroyed:(OTStream *)stream
 {
-    if ([_subscriber.stream.streamId isEqualToString:stream.streamId])
+    if ([self.subscriber.stream.streamId isEqualToString:stream.streamId])
     {
         [self cleanupSubscriber];
     }
